@@ -22,11 +22,11 @@ import java.io.IOException;
 public class TSP {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
-        Path in = new Path(args[0]);
-        Path out = new Path(args[1]);
-        Path graph = new Path(args[2]);
+        Path in = new Path("/user/instances/");
+        Path out = new Path("/user/ATSP/output");
+        Path graph = new Path("/user/tspadata1.txt");
         conf.set("graph.path", graph.toString());
-        conf.set("limit", args[3]);
+        conf.set("limit", "2000");
 
         Job job = Job.getInstance(conf);
 

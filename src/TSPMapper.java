@@ -48,7 +48,7 @@ public class TSPMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
-        Path graphPath = new Path(context.getConfiguration().get("paths.graph"));
+        Path graphPath = new Path(context.getConfiguration().get("graph.path"));
         FileSystem fs = FileSystem.get(new Configuration());
         BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(graphPath)));
         String line;
@@ -79,7 +79,9 @@ public class TSPMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
         trails = new double[towns][towns];
         probs = new double[towns];
         workers = new Ant[ants];
-        initAnts();
+        for(int k = 0; k < workers.length;k++){
+            workers[k] = new Ant();
+        }
     }
 
     @Override
@@ -213,7 +215,11 @@ public class TSPMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
 
     private void setupAnts(){
         currentIndex = -1;
+        System.out.println("HEHEHEHEHEHEHEHEHEHEHEHEHROIQHREOIFIENFDIFDANOIFJA");
+        System.out.println(workers.length);
         for(Ant a : workers){
+            System.out.println("HEHEHEHEHEHEHEHEHEHEHEHEHROIQHREOIFIENFDIFDANOIFJA");
+            System.out.println((a==null? "NULL" : "NOT NULL"));
             a.clear();
             a.visitTown(rand.nextInt(towns));
         }
@@ -223,7 +229,7 @@ public class TSPMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
         calculateEvaporation();
         for(Ant a : workers){
             double contribution = Q / a.tourLength();
-            for(int i = 0; i < towns; i++){
+            for(int i = 0; i < towns - 1; i++){
                 trails[a.tour[i]][a.tour[i+1]] += contribution;
             }
             trails[a.tour[towns - 1]][a.tour[0]] += contribution;

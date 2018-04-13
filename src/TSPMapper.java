@@ -5,6 +5,8 @@ import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.BufferedReader;
@@ -24,7 +26,7 @@ import java.util.Random;
  *  MapReduce implementation was inspired by a similar approach to solving kmeans clustering using
  *  a batch based approach. Each mapper executes Ant TSP and a reducer task finds the best tour from all mappers.
  */
-public class TSPMapper extends Mapper<NullWritable, IntWritable, IntWritable, Text> {
+public class TSPMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
     private double[][] Graph = null;
     private double[][] trails = null;
     private Ant[] workers = null;
@@ -81,7 +83,7 @@ public class TSPMapper extends Mapper<NullWritable, IntWritable, IntWritable, Te
     }
 
     @Override
-    protected void map(NullWritable key, IntWritable value, Context context) throws IOException, InterruptedException {
+    protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         // perform Ant TSP using the Graph data
         // Each Mapper performs its own version of Ant TSP
         // key is ignored

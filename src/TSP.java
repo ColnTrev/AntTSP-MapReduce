@@ -42,7 +42,9 @@ public class TSP {
 
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(Text.class);
-
-        System.exit(job.waitForCompletion(true)? 0: 1);
+        long startTime = System.currentTimeMillis();
+        job.waitForCompletion(true);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Elapsed Time: " + (endTime - startTime));
     }
 }

@@ -156,29 +156,37 @@ public class TSPMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
         return Double.longBitsToDouble(((long) y) << 32);
     }
 
-    private int selectNextTown(Ant ant){
-        if(rand.nextDouble() < pr){
-            int t = rand.nextInt(towns - currentIndex);
+    private int selectNextTown(Ant ant) {
+        // sometimes just randomly select
+        if (rand.nextDouble() < pr) {
+            int t = rand.nextInt(towns - currentIndex); // random town
             int j = -1;
-            for(int i = 0; i < towns; i++){
-                if(!ant.visited(i)){
+            for (int i = 0; i < towns; i++) {
+                if (!ant.visited(i))
                     j++;
-                }
-                if(j == t){
+                if (j == t)
                     return i;
-                }
             }
+
         }
+        // calculate probabilities for each town (stored in probs)
         probTo(ant);
+        // randomly select according to probs
         double r = rand.nextDouble();
-        double total = 0.0;
+        double tot = 0;
+        for (int i = 0; i < towns; i++) {
+            tot += probs[i];
+            if (tot >= r)
+                return i;
+        }
+
+        // if both conditions fail select next town that is not visited
         for(int i = 0; i < towns; i++){
-            total += probs[i];
-            if(total >= r){
+            if(!ant.visited(i)){
                 return i;
             }
         }
-        return -1; // should never get this
+        throw new RuntimeException("Still doesn't work......");
     }
     private void probTo(Ant ant){
         int i = ant.tour[currentIndex];
@@ -208,13 +216,14 @@ public class TSPMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
         }
     }
 
-    private void setupAnts(){
+    private void setupAnts() {
         currentIndex = -1;
-        for(Ant a : workers){
-            a.clear();
-            a.visitTown(rand.nextInt(towns));
+        for (int i = 0; i < ants; i++) {
+            workers[i].clear(); // faster than fresh allocations.
+            workers[i].visitTown(rand.nextInt(towns));
         }
         currentIndex++;
+
     }
     private void updateTrails(){
         calculateEvaporation();

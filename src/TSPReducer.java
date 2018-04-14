@@ -22,7 +22,7 @@ public class TSPReducer extends Reducer<IntWritable, Text, IntWritable, Text> {
         Double tourLength = -1.0; // set to negative since we will have no negative tour lengths
         for(Text value : values){
             total++;
-            String[] results = value.toString().split(" ");
+            String[] results = value.toString().split(",");
             double length = Double.parseDouble(results[1]);
             if(tourLength == -1 || length < tourLength){
                 tourLength = length;

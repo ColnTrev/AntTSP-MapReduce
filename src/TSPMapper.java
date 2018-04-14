@@ -149,11 +149,6 @@ public class TSPMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
         }
     }
 
-    protected void initAnts(){
-        for(Ant a : workers){
-            a = new Ant();
-        }
-    }
 
     protected double pow(final double a, final double b) {
         final int x = (int) (Double.doubleToLongBits(a) >> 32);
@@ -162,9 +157,9 @@ public class TSPMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
     }
 
     private int selectNextTown(Ant ant){
-        int j = -1;
         if(rand.nextDouble() < pr){
             int t = rand.nextInt(towns - currentIndex);
+            int j = -1;
             for(int i = 0; i < towns; i++){
                 if(!ant.visited(i)){
                     j++;
@@ -183,7 +178,7 @@ public class TSPMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
                 return i;
             }
         }
-        return j; // should never get this
+        return -1; // should never get this
     }
     private void probTo(Ant ant){
         int i = ant.tour[currentIndex];
@@ -215,11 +210,7 @@ public class TSPMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
 
     private void setupAnts(){
         currentIndex = -1;
-        System.out.println("HEHEHEHEHEHEHEHEHEHEHEHEHROIQHREOIFIENFDIFDANOIFJA");
-        System.out.println(workers.length);
         for(Ant a : workers){
-            System.out.println("HEHEHEHEHEHEHEHEHEHEHEHEHROIQHREOIFIENFDIFDANOIFJA");
-            System.out.println((a==null? "NULL" : "NOT NULL"));
             a.clear();
             a.visitTown(rand.nextInt(towns));
         }

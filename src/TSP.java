@@ -24,9 +24,9 @@ public class TSP {
         Configuration conf = new Configuration();
         Path in = new Path("/user/instances/");
         Path out = new Path("/user/ATSP/output");
-        Path graph = new Path("/user/tspadata1.txt");
+        Path graph = new Path("/user/tspadata2.txt");
         conf.set("graph.path", graph.toString());
-        conf.set("limit", "2000");
+        conf.setInt("limit", 2000);
 
         Job job = Job.getInstance(conf);
 
